@@ -1,7 +1,6 @@
 from psycopg2 import connect, DatabaseError
 from config import postgres
 
-
 try:
     # read connection parameters
     params = postgres()

@@ -3,6 +3,7 @@ from pandas import read_csv
 from unidecode import unidecode
 from sys import exit
 from database import *
+from catraca import *
 
 if __name__ == '__main__':
     """Main function"""
@@ -32,8 +33,9 @@ if __name__ == '__main__':
             print('######################## Cartão Atualizado ########################')
             print('Cartão antigo: %s Cartão Novo: %s Pessoa: %s' % (isIndb[2], row.cartao, row.pessoa))
         # if it is not duplciate, insert into database
-        else:
-            insert_pessoa(row.pessoa, row.matricula, row.cartao, row.id_curso)
-            print('######################## Pessoa Cadastrada ########################')
-            print('Pessoa: %s Cartão Novo: %s ' % (row.pessoa, row.cartao))
+        # else:
+        #     insert_pessoa(row.pessoa, row.matricula, row.cartao, row.id_curso)
+        #     print('######################## Pessoa Cadastrada ########################')
+        #     print('Pessoa: %s Cartão Novo: %s ' % (row.pessoa, row.cartao))
     close_db()
+    update_catraca()
