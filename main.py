@@ -1,6 +1,7 @@
 from tkinter import filedialog
 from pandas import read_csv
 from unidecode import unidecode
+from sys import exit
 from database import *
 
 if __name__ == '__main__':
@@ -9,6 +10,9 @@ if __name__ == '__main__':
     file = filedialog.askopenfile(mode='r', filetypes=[('csv', '.csv')], initialdir='~/Downloads')
     # read file do a dataframe
     dfTodo = read_csv(file)
+    if dfTodo.empty or not {'cartao', 'pessoa', 'matricula', 'curso', 'id_curso'}.issubset(dfTodo.columns):
+        print('Verifique se o arquivo csv possui as colunas cartao, pessoa, matricula, curso, id_curso')
+        exit()
     # Normalize strings
     for pessoa, curso in zip(dfTodo['pessoa'], dfTodo['curso']):
         # remove accents and transform to upper
