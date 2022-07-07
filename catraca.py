@@ -1,7 +1,6 @@
 from socket import socket, AF_INET, SOCK_STREAM
 from concurrent.futures import ThreadPoolExecutor
 from itertools import repeat
-import logging
 from config import catraca
 
 
@@ -45,40 +44,35 @@ def packet_format(data):
     return packet
 
 
-def operacao(op):
+def operacao(op, matricula, cartao, pessoa):
+    """format evento as per the API reference"""
     switch = {
-        'I': "00+ECAR+00+1+I[%s[%s[[[1[1[0[[[[W[2[[[[[0[%s",
-        'A': "00+ECAR+00+1+A[%s[%s[[[1[1[0[[[[W[2[[[[[0[%s",
-        'E': "00+ECAR+00+1+E[%s[%s[[[[[[[[[[[[[[[["
+        'I': "00+ECAR+00+1+I[%s[%s[[[1[1[0[[[[W[2[[[[[0[%s" % (matricula, cartao, pessoa),
+        'A': "00+ECAR+00+1+A[%s[%s[[[1[1[0[[[[W[2[[[[[0[%s" % (matricula, cartao, pessoa),
+        'E': "00+ECAR+00+1+E[%s[%s[[[[[[[[[[[[[[[[" % (matricula, cartao)
     }
     return switch.get(op)
 
 
-def thread(index, op, matricula, cartao, pessoa):
+def thread(index, evento):
     """Each thread will connect to a turntable and send the packet data"""
-    logging.info("Thread %s: starting", index)
     # create connection
     conn = socket(AF_INET, SOCK_STREAM)
     # connect to a turntable
     conn.connect((params['c'+str(index + 1)], int(params['tcpport'])))
-    # format evento as per the API reference
-    evento = operacao(op) % (matricula, cartao, pessoa)
     # send packet
     conn.send(packet_format(evento).encode())
     # print the response
     print(params['c'+str(index + 1)]+" == "+conn.recv(int(params['buffersize'])).decode())
     # close connection
     conn.close()
-    logging.info("Thread %s: finishing", index)
 
 
 def update_catraca(op, matricula, cartao, pessoa):
     """create 4 threads to send data to the turntables"""
-    # format logging for debug purposes
-    formato = "%(asctime)s: %(message)s"
-    logging.basicConfig(format=formato, level=logging.INFO,
-                        datefmt="%H:%M:%S")
+    # select operation string
+    evento = operacao(op, matricula, cartao, pessoa)
     # start 4 threads, each one will access one turntable and edit the register
     with ThreadPoolExecutor(max_workers=4) as executor:
         # executor.map(thread, range(4), matricula, cartao, pessoa)
-        executor.map(thread, range(4), repeat(op), repeat(matricula), repeat(cartao), repeat(pessoa))
+        executor.map(thread, range(4), repeat(evento))
