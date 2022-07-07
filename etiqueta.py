@@ -8,12 +8,12 @@ def desenha(label, width, height, obj):
     if type(obj) == int:
         label.add(shapes.String(0, 0, str()))
     else:
-        label.add(shapes.String(width/2-10, height - 13, 'IFPR', fontName="Helvetica", fontSize=10))
+        label.add(shapes.String(width/2-10, height - 15, 'IFPR', fontName="Helvetica", fontSize=10))
         label.add(shapes.String(4, height - 25, 'Nome: ' + obj.pessoa, fontName="Helvetica", fontSize=6))
         label.add(shapes.String(4, height - 35, 'Matricula: ' + str(obj.matricula), fontName="Helvetica", fontSize=6))
         label.add(shapes.String(4, height - 45, obj.curso, fontName="Helvetica", fontSize=5))
         label.add(shapes.String(4, height - 55, 'Cartão: ' + str(obj.cartao), fontName="Helvetica", fontSize=6))
-        label.add(shapes.String(width / 2 - 20, 3, 'Curitiba', fontName="Helvetica", fontSize=10))
+        label.add(shapes.String(width / 2 - 20, 5, 'Curitiba', fontName="Helvetica", fontSize=10))
 
 
 def criar_etiquetas(df):
