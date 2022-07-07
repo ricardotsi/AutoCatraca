@@ -32,10 +32,10 @@ if __name__ == '__main__':
             update_pessoa(row.pessoa, row.matricula, row.cartao)
             print('######################## Cartão Atualizado ########################')
             print('Cartão antigo: %s Cartão Novo: %s Pessoa: %s' % (isIndb[2], row.cartao, row.pessoa))
-        # if it is not duplciate, insert into database
-        # else:
-        #     insert_pessoa(row.pessoa, row.matricula, row.cartao, row.id_curso)
-        #     print('######################## Pessoa Cadastrada ########################')
-        #     print('Pessoa: %s Cartão Novo: %s ' % (row.pessoa, row.cartao))
+        # if it is not duplicate, insert into database
+        else:
+            # insert_pessoa(row.pessoa, row.matricula, row.cartao, row.id_curso)
+            print('######################## Pessoa Cadastrada ########################')
+            print('Pessoa: %s Cartão Novo: %s ' % (row.pessoa, row.cartao))
+            update_catraca(row.matricula, row.cartao, row.pessoa)
     close_db()
-    update_catraca()
