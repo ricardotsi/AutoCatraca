@@ -49,7 +49,7 @@ def operacao(op, matricula, cartao, pessoa):
     switch = {
         'I': "00+ECAR+00+1+I[[%s[[[1[1[0[[[[W[2[[[[[0[%s[%s" % (matricula, pessoa, cartao),
         'A': "00+ECAR+00+1+A[[%s[[[1[1[0[[[[W[2[[[[[0[%s[%s" % (matricula, pessoa, cartao),
-        'E': "00+ECAR+00+1+E[%s[%s[[[[[[[[[[[[[[[[" % (matricula, cartao)
+        'E': "00+ECAR+00+1+E[[%s[[[[[[[[[[[[[[[[[%s" % (matricula, cartao)
     }
     return switch.get(op)
 

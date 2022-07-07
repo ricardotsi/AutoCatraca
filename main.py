@@ -35,7 +35,7 @@ if __name__ == '__main__':
             update_catraca("A", row.matricula, row.cartao, row.pessoa)
         # if it is not duplicate, insert into database
         else:
-            insert_pessoa(row.pessoa, row.matricula, row.cartao, row.id_curso)
+            # insert_pessoa(row.pessoa, row.matricula, row.cartao, row.id_curso)
             print('@@@@@@@@@@@@@@@@@@@@@@@@ Cadastrado @@@@@@@@@@@@@@@@@@@@@@@@')
             print('Pessoa: %s Cartão: %s ' % (row.pessoa, row.cartao))
             update_catraca("I", row.matricula, row.cartao, row.pessoa)
