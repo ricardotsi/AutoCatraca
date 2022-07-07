@@ -45,7 +45,16 @@ def packet_format(data):
     return packet
 
 
-def thread(index, matricula, cartao, pessoa):
+def operacao(op):
+    switch = {
+        'I': "00+ECAR+00+1+I[%s[%s[[[1[1[0[[[[W[2[[[[[0[%s",
+        'A': "00+ECAR+00+1+A[%s[%s[[[1[1[0[[[[W[2[[[[[0[%s",
+        'E': "00+ECAR+00+1+E[%s[%s[[[[[[[[[[[[[[[["
+    }
+    return switch.get(op)
+
+
+def thread(index, op, matricula, cartao, pessoa):
     """Each thread will connect to a turntable and send the packet data"""
     logging.info("Thread %s: starting", index)
     # create connection
@@ -53,8 +62,7 @@ def thread(index, matricula, cartao, pessoa):
     # connect to a turntable
     conn.connect((params['c'+str(index + 1)], int(params['tcpport'])))
     # format evento as per the API reference
-    # evento = "00+ECAR+00+1+A[%s[%s[[[1[1[0[[[[W[2[[[[[0[%s" % (matricula, cartao, pessoa)
-    evento = "00+ECAR+00+1+E[%s[%s[[[[[[[[[[[[[[[[" % (matricula, cartao)
+    evento = operacao(op) % (matricula, cartao, pessoa)
     # send packet
     conn.send(packet_format(evento).encode())
     # print the response
@@ -64,7 +72,7 @@ def thread(index, matricula, cartao, pessoa):
     logging.info("Thread %s: finishing", index)
 
 
-def update_catraca(matricula, cartao, pessoa):
+def update_catraca(op, matricula, cartao, pessoa):
     """create 4 threads to send data to the turntables"""
     # format logging for debug purposes
     formato = "%(asctime)s: %(message)s"
@@ -73,5 +81,4 @@ def update_catraca(matricula, cartao, pessoa):
     # start 4 threads, each one will access one turntable and edit the register
     with ThreadPoolExecutor(max_workers=4) as executor:
         # executor.map(thread, range(4), matricula, cartao, pessoa)
-        executor.map(thread, range(4), repeat(matricula), repeat(cartao), repeat(pessoa))
-
+        executor.map(thread, range(4), repeat(op), repeat(matricula), repeat(cartao), repeat(pessoa))
