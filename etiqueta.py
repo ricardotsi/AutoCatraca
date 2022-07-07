@@ -24,7 +24,7 @@ def criar_etiquetas(df):
     specs = Specification(216, 279, 3, 10, 66.7, 25.4, corner_radius=2,
                           left_margin=5, right_margin=4.9, top_margin=13, bottom_margin=12, column_gap=3)
     # create pages with the drawable function
-    sheet = Sheet(specs, desenha, border=True)
+    sheet = Sheet(specs, desenha, border=False)
     # add labels with iterator
     sheet.add_labels(range(posicao))
     sheet.add_labels(df.itertuples())
