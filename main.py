@@ -4,6 +4,8 @@ from unidecode import unidecode
 from sys import exit
 from database import *
 from catraca import update_catraca
+from etiqueta import criar_etiquetas
+
 
 if __name__ == '__main__':
     """Main function"""
@@ -29,14 +31,16 @@ if __name__ == '__main__':
         isIndb = get_pessoa(row.pessoa, row.matricula)
         # if there is a duplicate, update cartao
         if isIndb is not None:
-            update_pessoa(row.pessoa, row.matricula, row.cartao)
+            #update_pessoa(row.pessoa, row.matricula, row.cartao)
             print('######################## Atualizado ########################')
             print('Cartão antigo: %s Cartão Novo: %s Pessoa: %s' % (isIndb[2], row.cartao, row.pessoa))
-            update_catraca("A", row.matricula, row.cartao, row.pessoa)
+            update_catraca("E", row.matricula, row.cartao, row.pessoa)
         # if it is not duplicate, insert into database
         else:
-            # insert_pessoa(row.pessoa, row.matricula, row.cartao, row.id_curso)
+            insert_pessoa(row.pessoa, row.matricula, row.cartao, row.id_curso)
             print('@@@@@@@@@@@@@@@@@@@@@@@@ Cadastrado @@@@@@@@@@@@@@@@@@@@@@@@')
             print('Pessoa: %s Cartão: %s ' % (row.pessoa, row.cartao))
             update_catraca("I", row.matricula, row.cartao, row.pessoa)
     close_db()
+    criar_etiquetas(dfTodo)
+
