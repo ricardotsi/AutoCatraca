@@ -19,9 +19,9 @@ def save_log(listalog):
 if __name__ == '__main__':
     """Main function"""
     print("\nSelecione a ação desejada:\n1)Adicionar pessoas(BD, catracas) e gerar etiquetas\n"
-          "2)Somente gerar etiquetas\n")
+          "2)Somente gerar etiquetas\n3)Deletar pessoas(catraca)")
     opcao = input()
-    if opcao != '1' and opcao != '2':
+    if opcao not in ('1', '2', '3'):
         execv(executable, ['python'] + argv)
     # open dialog to select file
     ofile = filedialog.askopenfile(mode='r', filetypes=[('csv', '.csv')], initialdir='~/Downloads')
@@ -40,8 +40,8 @@ if __name__ == '__main__':
         dfTodo = dfTodo.replace(curso, cursoNorm)
     # remove duplicates inside dataframe
     dfTodo = dfTodo.drop_duplicates(subset='pessoa').drop_duplicates(subset='matricula')
+    log = []
     if opcao == '1':
-        log = []
         for row in dfTodo.itertuples():
             # find duplicates from dataframe in database
             isIndb = get_pessoa(row.pessoa, row.matricula)
@@ -55,8 +55,8 @@ if __name__ == '__main__':
                     log.append(r)
             # if it is not duplicate, insert into database
             else:
-                # insert_pessoa(row.pessoa, row.matricula, row.cartao, row.id_curso)
-                res = (update_catraca("E", row.matricula, row.cartao, row.pessoa))
+                insert_pessoa(row.pessoa, row.matricula, row.cartao, row.id_curso)
+                res = (update_catraca("I", row.matricula, row.cartao, row.pessoa))
                 log.append('@@@@@@@@@@@@@@@@@@@@@@@@ Cadastrado @@@@@@@@@@@@@@@@@@@@@@@@')
                 log.append('Pessoa: %s Cartão: %s ' % (row.pessoa, row.cartao))
                 for r in res:
@@ -69,3 +69,11 @@ if __name__ == '__main__':
         criar_etiquetas(dfTodo)
     elif opcao == '2':
         criar_etiquetas(dfTodo)
+    elif opcao == '3':
+        # delete from turntables
+        for row in dfTodo.itertuples():
+            res = update_catraca("E", row.matricula, row.cartao, row.pessoa)
+            log.append('&&&&&&&&&&&&&&&&&&&&&&&&& Deletado &&&&&&&&&&&&&&&&&&&&&&&&&&&')
+            log.append('Cartão: %s Pessoa: %s' % (row.cartao, row.pessoa))
+            for r in res:
+                log.append(r)
