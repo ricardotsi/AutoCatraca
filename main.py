@@ -19,7 +19,7 @@ def save_log(listalog):
 if __name__ == '__main__':
     """Main function"""
     print("\nSelecione a ação desejada:\n1)Adicionar pessoas(BD, catracas) e gerar etiquetas\n"
-          "2)Somente gerar etiquetas\n3)Deletar pessoas(catraca)")
+          "2)Somente gerar etiquetas\n3)Deletar pessoas(catraca)\n")
     opcao = input()
     if opcao not in ('1', '2', '3'):
         execv(executable, ['python'] + argv)
@@ -55,8 +55,8 @@ if __name__ == '__main__':
                     log.append(r)
             # if it is not duplicate, insert into database
             else:
-                insert_pessoa(row.pessoa, row.matricula, row.cartao, row.id_curso)
-                res = (update_catraca("I", row.matricula, row.cartao, row.pessoa))
+                # insert_pessoa(row.pessoa, row.matricula, row.cartao, row.id_curso)
+                res = (update_catraca("E", row.matricula, row.cartao, row.pessoa))
                 log.append('@@@@@@@@@@@@@@@@@@@@@@@@ Cadastrado @@@@@@@@@@@@@@@@@@@@@@@@')
                 log.append('Pessoa: %s Cartão: %s ' % (row.pessoa, row.cartao))
                 for r in res:
@@ -72,8 +72,9 @@ if __name__ == '__main__':
     elif opcao == '3':
         # delete from turntables
         for row in dfTodo.itertuples():
-            res = update_catraca("E", row.matricula, row.cartao, row.pessoa)
-            log.append('&&&&&&&&&&&&&&&&&&&&&&&&& Deletado &&&&&&&&&&&&&&&&&&&&&&&&&&&')
-            log.append('Cartão: %s Pessoa: %s' % (row.cartao, row.pessoa))
+            res = (update_catraca("E", row.matricula, row.cartao, row.pessoa))
+            log.append('&&&&&&&&&&&&&&&&&&&&&&&&& Deletado &&&&&&&&&&&&&&&&&&&&&&&&&')
+            log.append('Pessoa: %s Cartão: %s ' % (row.pessoa, row.cartao))
             for r in res:
                 log.append(r)
+        save_log(log)
