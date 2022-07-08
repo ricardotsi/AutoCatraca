@@ -63,9 +63,10 @@ def thread(index, evento):
     # send packet
     conn.send(packet_format(evento).encode())
     # print the response
-    print("Catraca "+str(index + 1)+" == "+conn.recv(int(params['buffersize'])).decode())
+    res = "Catraca "+str(index + 1)+" == "+conn.recv(int(params['buffersize'])).decode()
     # close connection
     conn.close()
+    return res
 
 
 def update_catraca(op, matricula, cartao, pessoa):
@@ -75,4 +76,5 @@ def update_catraca(op, matricula, cartao, pessoa):
     # start 4 threads, each one will access one turntable and edit the register
     with ThreadPoolExecutor(max_workers=4) as executor:
         # executor.map(thread, range(4), matricula, cartao, pessoa)
-        executor.map(thread, range(4), repeat(evento))
+        res = executor.map(thread, range(4), repeat(evento))
+        return res
