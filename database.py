@@ -30,7 +30,7 @@ def update_pessoa(pessoa, matricula, cartao):
         conn.commit()
 
 
-def insert_pessoa(pessoa, matricula, cartao, curso):
+def insert_pessoa(pessoa, matricula, cartao, curso, ano):
     """insert person into database"""
     # get max id for new register
     cur.execute('select max(id) from ifpracessomain_pessoa')
@@ -38,7 +38,7 @@ def insert_pessoa(pessoa, matricula, cartao, curso):
     # insert new person in database
     try:
         cur.execute('insert into ifpracessomain_pessoa values (%s, %s, %s, %s, %s, %s, %s)',
-                    (maxid[0]+1, pessoa, cartao, matricula, str(matricula)[0:3], 'S', curso))
+                    (maxid[0]+1, pessoa, cartao, matricula, ano, 'S', curso))
     except (Exception, DatabaseError) as er:
         print(er)
     finally:
