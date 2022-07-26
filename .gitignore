@@ -3,3 +3,11 @@
 __pycache__/
 etiqueta.pdf
 log*.txt
+bin/
+include/
+lib
+pyvenv.cfg
+lib64
+bin/python
+bin/python3
+bin/python3.10
