@@ -5,7 +5,7 @@ def config_parser(section):
     """read params based on section"""
     parser = ConfigParser()
     # read file
-    parser.read('config.ini')
+    parser.read('/home/ricardo/Documentos/AutoCatraca/config.ini')
     # get params from file section and add to config
     config = {}
     if parser.has_section(section):

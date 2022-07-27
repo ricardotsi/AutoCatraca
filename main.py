@@ -56,7 +56,7 @@ if __name__ == '__main__':
             # if it is not duplicate, insert into database
             else:
                 insert_pessoa(row.pessoa, row.matricula, row.cartao, row.id_curso, row.ano)
-                res = (update_catraca("E", row.matricula, row.cartao, row.pessoa))
+                res = (update_catraca("I", row.matricula, row.cartao, row.pessoa))
                 log.append('@@@@@@@@@@@@@@@@@@@@@@@@ Cadastrado @@@@@@@@@@@@@@@@@@@@@@@@')
                 log.append('Pessoa: %s Cartão: %s ' % (row.pessoa, row.cartao))
                 for r in res:
