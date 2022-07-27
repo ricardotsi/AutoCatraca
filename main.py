@@ -4,8 +4,8 @@ from unidecode import unidecode
 from sys import exit, argv, executable
 from os import execv
 from datetime import datetime
-# from database import *
-# from catraca import update_catraca
+from database import *
+from catraca import update_catraca
 from etiqueta import criar_etiquetas
 
 
@@ -42,39 +42,39 @@ if __name__ == '__main__':
     dfTodo = dfTodo.drop_duplicates(subset='pessoa').drop_duplicates(subset='matricula')
     log = []
     if opcao == '1':
-        # for row in dfTodo.itertuples():
-        #     # find duplicates from dataframe in database
-        #     isIndb = get_pessoa(row.pessoa, row.matricula)
-        #     # if there is a duplicate, update cartao
-        #     if isIndb is not None:
-        #         update_pessoa(row.pessoa, row.matricula, row.cartao)
-        #         res = update_catraca("A", row.matricula, row.cartao, row.pessoa)
-        #         log.append('######################## Atualizado ########################')
-        #         log.append('Cartão antigo: %s Cartão Novo: %s Pessoa: %s' % (isIndb[2], row.cartao, row.pessoa))
-        #         for r in res:
-        #             log.append(r)
-        #     # if it is not duplicate, insert into database
-        #     else:
-        #         insert_pessoa(row.pessoa, row.matricula, row.cartao, row.id_curso, row.ano)
-        #         res = (update_catraca("E", row.matricula, row.cartao, row.pessoa))
-        #         log.append('@@@@@@@@@@@@@@@@@@@@@@@@ Cadastrado @@@@@@@@@@@@@@@@@@@@@@@@')
-        #         log.append('Pessoa: %s Cartão: %s ' % (row.pessoa, row.cartao))
-        #         for r in res:
-        #             log.append(r)
-        # # close database
-        # close_db()
-        # # Save log
-        # save_log(log)
-        # # create labels for printing
+        for row in dfTodo.itertuples():
+            # find duplicates from dataframe in database
+            isIndb = get_pessoa(row.pessoa, row.matricula)
+            # if there is a duplicate, update cartao
+            if isIndb is not None:
+                update_pessoa(row.pessoa, row.matricula, row.cartao)
+                res = update_catraca("A", row.matricula, row.cartao, row.pessoa)
+                log.append('######################## Atualizado ########################')
+                log.append('Cartão antigo: %s Cartão Novo: %s Pessoa: %s' % (isIndb[2], row.cartao, row.pessoa))
+                for r in res:
+                    log.append(r)
+            # if it is not duplicate, insert into database
+            else:
+                insert_pessoa(row.pessoa, row.matricula, row.cartao, row.id_curso, row.ano)
+                res = (update_catraca("E", row.matricula, row.cartao, row.pessoa))
+                log.append('@@@@@@@@@@@@@@@@@@@@@@@@ Cadastrado @@@@@@@@@@@@@@@@@@@@@@@@')
+                log.append('Pessoa: %s Cartão: %s ' % (row.pessoa, row.cartao))
+                for r in res:
+                    log.append(r)
+        # close database
+        close_db()
+        # Save log
+        save_log(log)
+        # create labels for printing
         criar_etiquetas(dfTodo)
     elif opcao == '2':
         criar_etiquetas(dfTodo)
     elif opcao == '3':
         # delete from turntables
-        # for row in dfTodo.itertuples():
-        #     res = (update_catraca("E", row.matricula, row.cartao, row.pessoa))
-        #     log.append('&&&&&&&&&&&&&&&&&&&&&&&&& Deletado &&&&&&&&&&&&&&&&&&&&&&&&&')
-        #     log.append('Pessoa: %s Cartão: %s ' % (row.pessoa, row.cartao))
-        #     for r in res:
-        #         log.append(r)
+        for row in dfTodo.itertuples():
+            res = (update_catraca("E", row.matricula, row.cartao, row.pessoa))
+            log.append('&&&&&&&&&&&&&&&&&&&&&&&&& Deletado &&&&&&&&&&&&&&&&&&&&&&&&&')
+            log.append('Pessoa: %s Cartão: %s ' % (row.pessoa, row.cartao))
+            for r in res:
+                log.append(r)
         save_log(log)
