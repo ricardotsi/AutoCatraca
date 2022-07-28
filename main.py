@@ -12,7 +12,7 @@ from etiqueta import criar_etiquetas
 def save_log(listalog):
     with open('log' + str(datetime.now()) + '.txt', 'w') as sfile:
         for item in listalog:
-            print(item)
+            # print(item)
             sfile.write('\n' + item)
 
 
@@ -74,7 +74,7 @@ if __name__ == '__main__':
         for row in dfTodo.itertuples():
             res = (update_catraca("E", row.matricula, row.cartao, row.pessoa))
             log.append('&&&&&&&&&&&&&&&&&&&&&&&&& Deletado &&&&&&&&&&&&&&&&&&&&&&&&&')
-            log.append('Pessoa: %s Cartão: %s ' % (row.pessoa, row.cartao))
+            log.append('Pessoa: %s Cartão: %s Matricula: %s' % (row.pessoa, row.cartao, row.matricula))
             for r in res:
                 log.append(r)
         save_log(log)
