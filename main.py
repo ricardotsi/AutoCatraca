@@ -12,8 +12,19 @@ from etiqueta import criar_etiquetas
 def save_log(listalog):
     with open('log' + str(datetime.now()) + '.txt', 'w') as sfile:
         for item in listalog:
-            # print(item)
             sfile.write('\n' + item)
+
+
+def normalize_string(dataframe):
+    # Normalize strings
+    for pessoa, curso in zip(dataframe['pessoa'], dataframe['curso']):
+        # remove accents and transform to upper
+        # replace old string with normalized ones
+        dataframe = dataframe.replace(pessoa, unidecode(pessoa).upper())
+        dataframe = dataframe.replace(curso, unidecode(curso).upper())
+    # remove duplicates inside dataframe
+    dataframe = dataframe.drop_duplicates(subset='pessoa').drop_duplicates(subset='matricula')
+    return dataframe
 
 
 if __name__ == '__main__':
@@ -30,33 +41,24 @@ if __name__ == '__main__':
     if dfTodo.empty or not {'cartao', 'pessoa', 'matricula', 'curso', 'id_curso'}.issubset(dfTodo.columns):
         print('Verifique se o arquivo csv possui as colunas cartao, pessoa, matricula, curso, id_curso')
         exit()
-    # Normalize strings
-    for pessoa, curso in zip(dfTodo['pessoa'], dfTodo['curso']):
-        # remove accents and transform to upper
-        pessoaNorm = unidecode(pessoa).upper()
-        cursoNorm = unidecode(curso).upper()
-        # replace old string with normalized ones
-        dfTodo = dfTodo.replace(pessoa, pessoaNorm)
-        dfTodo = dfTodo.replace(curso, cursoNorm)
-    # remove duplicates inside dataframe
-    dfTodo = dfTodo.drop_duplicates(subset='pessoa').drop_duplicates(subset='matricula')
     log = []
     if opcao == '1':
+        dfTodo = normalize_string(dfTodo)
         for row in dfTodo.itertuples():
             # find duplicates from dataframe in database
             isIndb = get_pessoa(row.pessoa, row.matricula)
             # if there is a duplicate, update cartao
             if isIndb is not None:
                 update_pessoa(row.pessoa, row.matricula, row.cartao)
-                res = update_catraca("A", row.matricula, row.cartao, row.pessoa)
+                res = update_catraca("A", row)
                 log.append('######################## Atualizado ########################')
                 log.append('Cartão antigo: %s Cartão Novo: %s Pessoa: %s' % (isIndb[2], row.cartao, row.pessoa))
                 for r in res:
                     log.append(r)
             # if it is not duplicate, insert into database
             else:
-                insert_pessoa(row.pessoa, row.matricula, row.cartao, row.id_curso, row.ano)
-                res = (update_catraca("I", row.matricula, row.cartao, row.pessoa))
+                # insert_pessoa(row.pessoa, row.matricula, row.cartao, row.id_curso, row.ano)
+                res = (update_catraca("I", row))
                 log.append('@@@@@@@@@@@@@@@@@@@@@@@@ Cadastrado @@@@@@@@@@@@@@@@@@@@@@@@')
                 log.append('Pessoa: %s Cartão: %s ' % (row.pessoa, row.cartao))
                 for r in res:
@@ -68,11 +70,12 @@ if __name__ == '__main__':
         # create labels for printing
         criar_etiquetas(dfTodo)
     elif opcao == '2':
+        dfTodo = normalize_string(dfTodo)
         criar_etiquetas(dfTodo)
     elif opcao == '3':
         # delete from turntables
         for row in dfTodo.itertuples():
-            res = (update_catraca("E", row.matricula, row.cartao, row.pessoa))
+            res = (update_catraca("E", row))
             log.append('&&&&&&&&&&&&&&&&&&&&&&&&& Deletado &&&&&&&&&&&&&&&&&&&&&&&&&')
             log.append('Pessoa: %s Cartão: %s Matricula: %s' % (row.pessoa, row.cartao, row.matricula))
             for r in res:

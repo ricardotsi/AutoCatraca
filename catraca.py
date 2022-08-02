@@ -44,12 +44,12 @@ def packet_format(data):
     return packet
 
 
-def operacao(op, matricula, cartao, pessoa):
+def operacao(op, row):
     """format evento as per the API reference"""
     switch = {
-        'I': "00+ECAR+00+1+I[[%s[[[1[1[0[[[[W[2[[[[[0[%s[%s" % (matricula, pessoa, cartao),
-        'A': "00+ECAR+00+1+A[[%s[[[1[1[0[[[[W[2[[[[[0[%s[%s" % (matricula, pessoa, cartao),
-        'E': "00+ECAR+00+1+E[[%s[[[[[[[[[[[[[[[[[" % matricula,
+        'I': "00+ECAR+00+1+I[[%s[[[1[1[0[[[[W[2[[[[[0[%s[%s" % (row.matricula, row.pessoa, row.cartao),
+        'A': "00+ECAR+00+1+A[[%s[[[1[1[0[[[[W[2[[[[[0[%s[%s" % (row.matricula, row.pessoa, row.cartao),
+        'E': "00+ECAR+00+1+E[[%s[[[[[[[[[[[[[[[[[" % row.matricula,
         'L': "00+ECAR+00+1+L[[[[[[[[[[[[[[[[[[["
     }
     return switch.get(op)
@@ -71,10 +71,10 @@ def thread(index, evento):
     return res
 
 
-def update_catraca(op, matricula, cartao, pessoa):
+def update_catraca(op, row):
     """create 4 threads to send data to the turntables"""
     # select operation string
-    evento = operacao(op, matricula, cartao, pessoa)
+    evento = operacao(op, row)
     # start 4 threads, each one will access one turntable and edit the register
     with ThreadPoolExecutor(max_workers=4) as executor:
         # executor.map(thread, range(4), matricula, cartao, pessoa)
