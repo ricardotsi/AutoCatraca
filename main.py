@@ -25,7 +25,7 @@ if __name__ == '__main__':
         execv(executable, ['python'] + argv)
     # open dialog to select file
     ofile = filedialog.askopenfile(mode='r', filetypes=[('csv', '.csv')], initialdir='~/Downloads')
-    # read file do a dataframe
+    # read file to a dataframe
     dfTodo = read_csv(ofile)
     if dfTodo.empty or not {'cartao', 'pessoa', 'matricula', 'curso', 'id_curso'}.issubset(dfTodo.columns):
         print('Verifique se o arquivo csv possui as colunas cartao, pessoa, matricula, curso, id_curso')
