@@ -1,6 +1,6 @@
 from labels import Specification, Sheet
 from reportlab.graphics import shapes
-
+from config import settings
 
 def desenha(label, width, height, obj):
     """organize the label to print"""
@@ -21,8 +21,7 @@ def criar_etiquetas(df):
     posicao = int(input()) - 1
     # Create a letter portrait (216mm x 279mm) sheets with 3 columns and 10 rows of
     # labels. Each label is 66.7mm x 25.4mm with a 2mm rounded corner.
-    specs = Specification(216, 279, 3, 10, 66.7, 25.4, corner_radius=2,
-                          left_margin=5, right_margin=4.9, top_margin=13, bottom_margin=12, column_gap=3)
+    specs = Specification(**settings.label)
     # create pages with the drawable function
     sheet = Sheet(specs, desenha, border=False)
     # add labels with iterator

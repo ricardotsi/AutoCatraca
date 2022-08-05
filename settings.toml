@@ -9,16 +9,17 @@ ip = ['172.17.150.1', '172.17.150.2', '172.17.150.3', '172.17.150.4']
 tcpport = 3000
 buffersize = 1024
 
-#[label]
-#height=216
-#width=
-#columns=
-#rows=
-#labelwidth=
-#labelheight=
-#cornerradius=
-#leftmargin=
-#rightmargin=
-#topmargin=
-#bottommargin=
-#columngap=
+[label]
+# all in milimeter(mm)
+sheet_height = 279
+sheet_width = 216
+columns = 3
+rows = 10
+label_width = 66.7
+label_height = 25.4
+corner_radius = 2
+left_margin = 5
+right_margin = 4.9
+top_margin = 13
+bottom_margin = 12
+column_gap = 3
