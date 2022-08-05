@@ -23,8 +23,6 @@ def packet_format(data):
     byteend = chr(int("3", base=16))
     # Quantity of data
     bytetam = [chr(len(data)), chr(int("0", base=16))]
-    # bytetam.append(chr(len(data)))
-    # bytetam.append(chr(int("0", base=16)))
     packet = ""
     # Insert <SB>
     packet += byteinit
@@ -47,9 +45,13 @@ def packet_format(data):
 def operacao(op, row):
     """format evento as per the API reference"""
     switch = {
+        # Insert
         'I': "00+ECAR+00+1+I[[%s[[[1[1[0[[[[W[2[[[[[0[%s[%s" % (row.matricula, row.pessoa, row.cartao),
+        # Update
         'A': "00+ECAR+00+1+A[[%s[[[1[1[0[[[[W[2[[[[[0[%s[%s" % (row.matricula, row.pessoa, row.cartao),
+        # Delete
         'E': "00+ECAR+00+1+E[[%s[[[[[[[[[[[[[[[[[" % row.matricula,
+        # Delete All
         'L': "00+ECAR+00+1+L[[[[[[[[[[[[[[[[[[["
     }
     return switch.get(op)
@@ -77,6 +79,5 @@ def update_catraca(op, row):
     evento = operacao(op, row)
     # start 4 threads, each one will access one turntable and edit the register
     with ThreadPoolExecutor(max_workers=4) as executor:
-        # executor.map(thread, range(4), matricula, cartao, pessoa)
         res = executor.map(thread, range(4), repeat(evento))
         return res

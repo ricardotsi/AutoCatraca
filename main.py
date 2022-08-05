@@ -29,17 +29,23 @@ def normalize_string(dataframe):
 
 if __name__ == '__main__':
     """Main function"""
-    print("\nSelecione a ação desejada:\n1)Adicionar pessoas(BD, catracas) e gerar etiquetas\n"
-          "2)Somente gerar etiquetas\n3)Deletar pessoas(catraca)\n")
+    # Print menu
+    print("Selecione a ação desejada:\n"
+          "1)Adicionar pessoas(BD, catracas) e gerar etiquetas\n"
+          "2)Somente gerar etiquetas\n"
+          "3)Deletar pessoas(catraca)\n")
     opcao = input()
+    # if not valid option, restart
     if opcao not in ('1', '2', '3'):
         execv(executable, ['python'] + argv)
     # open dialog to select file
-    ofile = filedialog.askopenfile(mode='r', filetypes=[('csv', '.csv')], initialdir='~/Downloads')
+    openFile = filedialog.askopenfile(mode='r', filetypes=[('csv', '.csv')], initialdir='~/Downloads')
     # read file to a dataframe
-    dfTodo = read_csv(ofile)
+    dfTodo = read_csv(openFile)
+    # check if csv is correct
     if dfTodo.empty or not {'cartao', 'pessoa', 'matricula', 'curso', 'id_curso'}.issubset(dfTodo.columns):
-        print('Verifique se o arquivo csv possui as colunas cartao, pessoa, matricula, curso, id_curso')
+        print('Verifique se o arquivo csv possui as colunas '
+              'cartao, pessoa, matricula, curso, id_curso e se o arquivo não está vazio')
         exit()
     log = []
     if opcao == '1':
@@ -58,7 +64,7 @@ if __name__ == '__main__':
             # if it is not duplicate, insert into database
             else:
                 insert_pessoa(row.pessoa, row.matricula, row.cartao, row.id_curso, row.ano)
-                res = (update_catraca("I", row))
+                res = update_catraca("I", row)
                 log.append('@@@@@@@@@@@@@@@@@@@@@@@@ Cadastrado @@@@@@@@@@@@@@@@@@@@@@@@')
                 log.append('Pessoa: %s Cartão: %s ' % (row.pessoa, row.cartao))
                 for r in res:
@@ -69,11 +75,12 @@ if __name__ == '__main__':
         save_log(log)
         # create labels for printing
         criar_etiquetas(dfTodo)
+    # create labels for printing
     elif opcao == '2':
         dfTodo = normalize_string(dfTodo)
         criar_etiquetas(dfTodo)
+    # delete from turntables
     elif opcao == '3':
-        # delete from turntables
         for row in dfTodo.itertuples():
             res = (update_catraca("E", row))
             log.append('&&&&&&&&&&&&&&&&&&&&&&&&& Deletado &&&&&&&&&&&&&&&&&&&&&&&&&')
