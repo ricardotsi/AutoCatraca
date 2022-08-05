@@ -1,10 +1,7 @@
 from socket import socket, AF_INET, SOCK_STREAM
 from concurrent.futures import ThreadPoolExecutor
 from itertools import repeat
-from config import catraca
-
-
-params = catraca()
+from config import settings
 
 
 def packet_format(data):
@@ -62,12 +59,12 @@ def thread(index, evento):
     # create connection
     conn = socket(AF_INET, SOCK_STREAM)
     # connect to a turntable
-    conn.connect((params['c'+str(index + 1)], int(params['tcpport'])))
+    conn.connect((settings.catraca.ip[index], settings.catraca.tcpport))
     # send packet
     conn.send(packet_format(evento).encode())
     # print the response
-    res = "Catraca "+str(index + 1)+" == "+conn.recv(int(params['buffersize'])).decode()
-    print(evento+"\nResultado: "+res+"\n\n")
+    res = "Catraca "+str(index + 1)+" == "+conn.recv(settings.catraca.buffersize).decode()
+    print(evento+"\n"+res+"\n")
     # close connection
     conn.close()
     return res

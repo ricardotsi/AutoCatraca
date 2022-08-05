@@ -1,11 +1,10 @@
 from psycopg2 import connect, DatabaseError
-from config import postgres
+from config import settings
+
 
 try:
-    # read connection parameters
-    params = postgres()
     # connect to the Postgres server
-    conn = connect(**params)
+    conn = connect(**settings.postgresql)
     # create a cursor
     cur = conn.cursor()
 except (Exception, DatabaseError) as error:

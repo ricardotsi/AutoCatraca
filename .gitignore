@@ -11,3 +11,6 @@ lib64
 bin/python
 bin/python3
 bin/python3.10
+
+# Ignore dynaconf secret files
+.secrets.*
