@@ -65,7 +65,7 @@ def thread(index, evento):
     conn.send(packet_format(evento).encode())
     # print the response
     res = "Catraca "+str(index + 1)+" == "+conn.recv(int(params['buffersize'])).decode()
-    print(evento+" | Resultado: "+res+"\n")
+    print(evento+"\nResultado: "+res+"\n\n")
     # close connection
     conn.close()
     return res
