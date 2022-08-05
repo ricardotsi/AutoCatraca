@@ -2,6 +2,7 @@ from labels import Specification, Sheet
 from reportlab.graphics import shapes
 from config import settings
 
+
 def desenha(label, width, height, obj):
     """organize the label to print"""
     # Just convert the object to a string and print this at the bottom left of the label.
