@@ -2,7 +2,6 @@
 host = "172.17.0.249"
 database = "ifpracesso"
 user = "postgres"
-password = "M4nut3nc40"
 
 [catraca]
 ip = ['172.17.150.1', '172.17.150.2', '172.17.150.3', '172.17.150.4']
