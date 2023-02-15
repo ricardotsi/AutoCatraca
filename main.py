@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from tkinter import filedialog
 from pandas import read_csv
 from unidecode import unidecode
